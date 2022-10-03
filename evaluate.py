@@ -7,12 +7,13 @@ import sys
 sys.path.append('./')
 import coco_names
 import image_utils
+from engine import evaluate
 
 def get_args():
     parser = argparse.ArgumentParser(description='Pytorch Faster-rcnn Detection')
 
     # parser.add_argument('--model_path', type=str, default='./result/model_19.pth', help='model path')
-    parser.add_argument('--image_path', type=str, default='./test.jpg', help='image path')
+    parser.add_argument('--evaluate_dir', type=str, default='./test.jpg', help='image path')
     parser.add_argument('--model', default='fasterrcnn_resnet50_fpn', help='model')
     parser.add_argument('--dataset', default='coco', help='model')
     parser.add_argument('--score', type=float, default=0.8, help='objectness score threshold')
@@ -30,9 +31,15 @@ def main():
     # Model creating
     print("Creating model")
     model = torchvision.models.detection.__dict__[args.model](num_classes=num_classes, pretrained=True)
-    model = model.cuda()
+    device = torch.device("cuda")
 
-    model.eval()
+
+    data_loader_test = torch.utils.data.DataLoader(
+        dataset_test, batch_size=args.b,
+        sampler=test_sampler, num_workers=args.workers,
+        collate_fn=utils.collate_fn)
+
+    evaluate(model, data_loader_test, device=device)
 
     # 加载模型
     # save = torch.load(args.model_path)

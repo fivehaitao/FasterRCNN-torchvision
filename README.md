@@ -8,7 +8,7 @@
     $ git clone https://github.com/supernotman/Faster-RCNN-with-torchvision.git
     $ cd Faster-RCNN-with-torchvision/
     $ sudo pip install -r requirements.txt
-
+    $ 
 ##### 数据准备
 目前代码仅支持coco数据集的训练
 1. 下载coco2017数据集
